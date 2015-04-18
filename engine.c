@@ -10,6 +10,7 @@ Engine* engine_init(MemoryPool* pool) {
 	Engine* engine = malloc(sizeof(Engine));
 	engine->automata = ac_automata_init();
 	engine->pool = pool;
+	engine->serial = 0;
 	engine_reset(engine);
 	return engine;
 }
@@ -18,7 +19,6 @@ void engine_reset(Engine* engine) {
 	engine->fresh = 1;
 	engine->match = NULL;
 	engine->tail = &engine->match;
-	engine->serial = 0;
 }
 
 void engine_destroy(Engine* engine) {
