@@ -64,7 +64,7 @@ class filter
         fclose($this->fp);
     }
 
-    public function test($text)
+    public function test($text, &$result_pairs = array())
     {
         if (isset($text[0x10000]) || empty($text)) {
             throw new Exception("bad length", 1);
@@ -102,17 +102,18 @@ class filter
 
             $pair_length = self::RESULT_PAIR_LENGTH;
             $start_pos = 0;
-            $result_pairs = array();
 
+            $count = 0;
             do {
                 $result_pairs[] = unpack("vpos/vlen", substr($result, $start_pos, $pair_length));
                 $start_pos += $pair_length;
-
+                ++$count;
             } while(isset($result[$start_pos]));
 
-            var_dump($result_pairs);
+            return $count;
         }
 
+        return 0;
     }
 }
 

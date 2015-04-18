@@ -14,6 +14,7 @@ typedef struct Engine {
 } Engine;
 
 Engine* engine_init(MemoryPool* pool);
+void engine_reset(Engine* engine);
 void engine_destroy(Engine* engine);
 void engine_increase(Engine* engine);
 void engine_decrease(Engine* engine);

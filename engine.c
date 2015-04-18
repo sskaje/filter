@@ -9,12 +9,16 @@
 Engine* engine_init(MemoryPool* pool) {
 	Engine* engine = malloc(sizeof(Engine));
 	engine->automata = ac_automata_init();
-	engine->fresh = 1;
 	engine->pool = pool;
+	engine_reset(engine);
+	return engine;
+}
+
+void engine_reset(Engine* engine) {
+	engine->fresh = 1;
 	engine->match = NULL;
 	engine->tail = &engine->match;
 	engine->serial = 0;
-	return engine;
 }
 
 void engine_destroy(Engine* engine) {
@@ -46,6 +50,9 @@ void engine_feed_text(Engine* engine, const AC_ALPHABET_t* text,
 	AC_TEXT_t t = {
 			text, length
 	};
+
+	log_info("Keep = %d", !engine->fresh);
+
 	ac_automata_search(engine->automata, &t, !engine->fresh, &handle_match,
 			engine);
 	if (engine->fresh) {

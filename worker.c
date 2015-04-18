@@ -101,9 +101,10 @@ static void serve_client(int client, WorkerContext* context) {
 			send_error(client, "Bad command!", 12);
 			return ;
 		}
-
+		// reset engine
 		read_main_text(client, req.Length, engine);
 		List* result = engine_get_result(engine);
+		engine_reset(engine);
 		send_result(client, result);
 	};
 }
