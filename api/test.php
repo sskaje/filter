@@ -29,6 +29,14 @@ $r = $filter->test("I feel like it is just a 测试", $p);
 dump_result($r, $p);
 
 
+$p = array();
+$r = $filter->filter("I feel like it is just a 测试", '*', false);
+var_dump($r);
+
+$p = array();
+$r = $filter->filter("I feel like it is just a 测试", '*', true);
+var_dump($r);
+
 function dump_result($count, $result_pairs)
 {
     echo "\nCount=$count\n";

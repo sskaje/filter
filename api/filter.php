@@ -115,6 +115,42 @@ class filter
 
         return 0;
     }
+
+    public function filter($text, $replace_with='*', $word_replace=false)
+    {
+        $result = $this->test($text, $result_pairs);
+        if (!$result) {
+            return $text;
+        }
+
+        if (empty($replace_with)) {
+            $replace_with = '*';
+        }
+
+        if (!$word_replace) {
+            foreach ($result_pairs as $t) {
+                $this->ascii_replace($text, $t['pos'], $t['len'], $replace_with[0]);
+            }
+        } else {
+            foreach ($result_pairs as $t) {
+                $slice = substr($text, $t['pos'], $t['len']);
+                if (($width = mb_strwidth($slice, 'UTF-8')) != $t['len']) {
+                    $text = substr($text, 0, $t['pos']) . str_repeat($replace_with[0], $width) . substr($text, $t['pos'] + $t['len']);
+                } else {
+                    $this->ascii_replace($text, $t['pos'], $t['len'], $replace_with[0]);
+                }
+            }
+        }
+
+        return $text;
+    }
+
+    protected function ascii_replace(&$text, $start, $length, $replace_char)
+    {
+        for ($i = 0; $i<$length; $i++) {
+            $text[$start + $i] = $replace_char;
+        }
+    }
 }
 
 class filterException extends Exception {}
