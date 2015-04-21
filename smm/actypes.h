@@ -68,6 +68,7 @@ typedef struct AC_PATTERN
 {
     const AC_ALPHABET_t * astring; /* String of alphabets */
     unsigned int length; /* Length of pattern */
+    unsigned int flag;
     AC_REP_t rep; /* Representative string (optional) */
 } AC_PATTERN_t;
 

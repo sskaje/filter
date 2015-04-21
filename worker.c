@@ -32,10 +32,19 @@ static void send_result(int client, List* result) {
 	RESULT_PAIR rp;
 
 	int offset = 0;
+	int i = 0;
+
 	while (offset + sizeof(RESULT_PAIR) < (int)sizeof(buffer)
 			&& result != NULL) {
+
+		for (i=0; i<20; i++) {
+			log_info("==%d\t%02x\t%c\n", i, result->data[i], result->data[i]);
+		}
 		rp.Length = FLT_LIST_GET(result, int)[1];
 		rp.StartPos = FLT_LIST_GET(result, int)[0] - rp.Length;
+		rp.Flag = FLT_LIST_GET(result, int)[2];
+
+		log_info("Start=%d, Length=%d, Flag=%d", rp.StartPos, rp.Length, rp.Flag);
 		memcpy(buffer+offset, &rp, sizeof(rp));
 
 		offset += sizeof(rp);

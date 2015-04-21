@@ -28,8 +28,34 @@ void engine_destroy(Engine* engine) {
 
 void engine_add_pattern(Engine* engine, const AC_ALPHABET_t* pattern,
 		int length) {
+	int flag = 0;
+
+	// find the last : and split
+	int c = 0;
+	int c_max = 5;
+	for (int i = length - 1; i >=0; i--) {
+		if ((pattern[i] < '0' || pattern[i] > '9') && pattern[i] != ':') {
+			break;
+		}
+
+		++c;
+		if (c >= c_max) {
+			break;
+		}
+		if (pattern[i] == ':') {
+			char flag_tmp[c_max];
+			memcpy(flag_tmp, pattern + i + 1, c);
+			flag_tmp[c+1] = '\0';
+			flag = atoi(flag_tmp);
+			length = i;
+			break;
+		}
+	}
+
+	log_info("add pattern: %s(len=%d), flag=%d", pattern, length, flag);
+
 	AC_PATTERN_t ptn = {
-			pattern, length,
+			pattern, length, flag,
 			{NULL}
 	};
 	ac_automata_add(engine->automata, &ptn);
@@ -40,6 +66,11 @@ static int handle_match(AC_MATCH_t* match, void* p) {
 	List* node = mpool_alloc(engine->pool, sizeof(List) + sizeof(int) * 2);
 	FLT_LIST_GET(node, int)[0] = match->position;
 	FLT_LIST_GET(node, int)[1] = match->patterns[0].length;
+	FLT_LIST_GET(node, int)[2] = match->patterns[0].flag;
+
+	log_info("T1 pattern: pos=%d, len=%d, flag=%d", match->position, match->patterns[0].length, match->patterns[0].flag);
+	log_info("T2 pattern: pos=%d, len=%d, flag=%d", FLT_LIST_GET(node, int)[0], FLT_LIST_GET(node, int)[1], FLT_LIST_GET(node, int)[2]);
+
 	*engine->tail = node;
 	engine->tail = &node->next;
 	return 0;

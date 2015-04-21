@@ -12,7 +12,7 @@ class filter
     const VERSION = 1;
     const HEADER_LENGTH = 6;
 
-    const RESULT_PAIR_LENGTH = 4;
+    const RESULT_PAIR_LENGTH = 6;
 
     protected $host;
     protected $port;
@@ -64,7 +64,7 @@ class filter
         fclose($this->fp);
     }
 
-    public function test($text, &$result_pairs = array())
+    public function match($text, &$result_pairs = array())
     {
         if (isset($text[0x10000]) || empty($text)) {
             throw new Exception("bad length", 1);
@@ -105,7 +105,7 @@ class filter
 
             $count = 0;
             do {
-                $result_pairs[] = unpack("vpos/vlen", substr($result, $start_pos, $pair_length));
+                $result_pairs[] = unpack("vpos/vlen/vflag", substr($result, $start_pos, $pair_length));
                 $start_pos += $pair_length;
                 ++$count;
             } while(isset($result[$start_pos]));
@@ -118,7 +118,7 @@ class filter
 
     public function filter($text, $replace_with='*', $word_replace=false)
     {
-        $result = $this->test($text, $result_pairs);
+        $result = $this->match($text, $result_pairs);
         if (!$result) {
             return $text;
         }

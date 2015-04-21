@@ -18,6 +18,7 @@ typedef struct __attribute__((__packed__)) {
 typedef struct __attribute__((__packed__)) {
     unsigned short StartPos;
     unsigned short Length;
+    unsigned short Flag;
 } RESULT_PAIR;
 
 enum {

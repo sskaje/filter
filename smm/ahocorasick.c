@@ -200,6 +200,7 @@ int ac_automata_search (AC_AUTOMATA_t * thiz, AC_TEXT_t * text, int keep,
             match.position = position + thiz->base_position;
             match.match_num = current->matched_patterns_num;
             match.patterns = current->matched_patterns;
+
             /* we found a match! do call-back */
             if (callback(&match, param))
                 return 1;
