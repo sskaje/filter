@@ -67,6 +67,9 @@ void        node_release           (AC_NODE_t * thiz);
 void        node_assign_id         (AC_NODE_t * thiz);
 void        node_sort_edges        (AC_NODE_t * thiz);
 
+// update flag
+int         node_update_flag       (AC_NODE_t * thiz, AC_PATTERN_t * newstr);
+
 #ifdef __cplusplus
 }
 #endif

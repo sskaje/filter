@@ -22,13 +22,14 @@ typedef struct __attribute__((__packed__)) {
 } RESULT_PAIR;
 
 enum {
-    CMD_NONE,
-    CMD_TEST,
+    CMD_NONE  = 0,
+    CMD_MATCH,
     CMD_RESULT,
     CMD_ADD,
     CMD_DELETE,
-
-    CMD_ERROR=255,
+    CMD_PING  = 253,
+    CMD_PONG  = 254,
+    CMD_ERROR = 255,
 };
 
 #endif //FILTER_PROTOCOL_H

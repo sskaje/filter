@@ -153,11 +153,11 @@ int node_has_matchstr (AC_NODE_t * thiz, AC_PATTERN_t * newstr)
 }
 
 /******************************************************************************
- * FUNCTION: node_has_matchstr
- * Determine if a final node contains a pattern in its accepted pattern list
- * or not. return values: 1 = it has, 0 = it hasn't
+ * FUNCTION: node_update_flag
+ * If a final node contains a pattern in its accepted pattern list, update flag
+ * with |=. return values: 1 = pattern found, 0 = pattern not found
 ******************************************************************************/
-int node_find_matchstr_updateflag (AC_NODE_t * thiz, AC_PATTERN_t * newstr)
+int node_update_flag (AC_NODE_t * thiz, AC_PATTERN_t * newstr)
 {
     int i, j;
     AC_PATTERN_t * str;
@@ -175,10 +175,7 @@ int node_find_matchstr_updateflag (AC_NODE_t * thiz, AC_PATTERN_t * newstr)
 
         if (j == str->length) {
             if (newstr->flag) {
-                printf("Old flag=%d\n", str->flag);
                 str->flag |= newstr->flag;
-                printf("New flag=%d\n", str->flag);
-
             }
             return 1;
         }
@@ -211,10 +208,7 @@ AC_NODE_t * node_create_next (AC_NODE_t * thiz, AC_ALPHABET_t alpha)
 void node_register_matchstr (AC_NODE_t * thiz, AC_PATTERN_t * str)
 {
     /* Check if the new pattern already exists in the node list */
-//    if (node_has_matchstr(thiz, str))
-//        return;
-
-    if (node_find_matchstr_updateflag(thiz, str))
+    if (node_has_matchstr(thiz, str))
         return;
 
     /* Manage memory */

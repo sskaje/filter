@@ -1,3 +1,7 @@
+关键词匹配服务
+======
+Author: torshie([https://github.com/torshie] (https://github.com/torshie)), sskaje ([http://sskaje.me](http://sskaje.me))
+
 # Build
 Run script build.sh to build the project. Note .c files under directory
 "test" will be ignored.
@@ -11,15 +15,7 @@ specified more than once.
 * "--thread" number of worker threads to start, optional, default to 10
 
 # Request & response
-Create a new connection for every request. Send the text needs to be
-checked to the address(es) listened by the program, the response will
-be in the following format:
-* The 1st line is status code, it will always be zero at the moment.
-* The 2nd line is a serial of integer pairs separated by spaces, integers
-of a pair are also separated by a space.
-* The 1st integer of a pair is the _END_ position of a matched pattern,
-the 2nd one is the length of the matched pattern.
-* All positions & lengthes are in bytes.
+See doc/protocol.md
 
 # Online pattern database reloading
 Send signal SIGUSR1 (kill -SIGUSR1 <pid>) to the process to reload the
@@ -29,3 +25,13 @@ pattern database.
 Modify source code to redefine type AC_ALPHABET_t to the type you like,
 rebuild the program, then encode all characters (pattern database and
 text to be checked) into sequences of AC_ALPHABET_t.
+
+# Pattern database format
+文本数据库，一行一个关键词。关键词支持额外的flag参数，结构如下:
+
+```
+word1:1
+word2:4
+word3:8
+word3:2
+```

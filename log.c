@@ -6,9 +6,6 @@
 
 #include "log.h"
 
-enum LogLevel {
-	kDebug = 1, kInfo, kWarning, kError, kFatal
-};
 
 static size_t get_current_time(char* buf, size_t size) {
 	time_t a = time(NULL);
@@ -19,6 +16,11 @@ static size_t get_current_time(char* buf, size_t size) {
 
 static void write_log(FILE* dest, int level, const char* fmt,
 		va_list ap) {
+
+	if (level < FLT_LOG_LEVEL) {
+		return;
+	}
+
 	const char* const kLevelName[] = {
 			NULL, "DEBUG: ", "INFO: ", "WARN: ", "ERROR: ", "FATAL: "
 	};

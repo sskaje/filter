@@ -28,8 +28,8 @@ void engine_destroy(Engine* engine) {
 
 void engine_add_pattern(Engine* engine, const AC_ALPHABET_t* pattern,
 		int length) {
-	int flag = 0;
 
+	int flag = 0;
 	// find the last : and split
 	int c = 0;
 	int c_max = 5;
@@ -52,7 +52,11 @@ void engine_add_pattern(Engine* engine, const AC_ALPHABET_t* pattern,
 		}
 	}
 
-	log_info("add pattern: %s(len=%d), flag=%d", pattern, length, flag);
+	if (length < 1) {
+		return;
+	}
+
+	log_debug("add pattern: %s(len=%d), flag=%d", pattern, length, flag);
 
 	AC_PATTERN_t ptn = {
 			pattern, length, flag,
@@ -63,13 +67,10 @@ void engine_add_pattern(Engine* engine, const AC_ALPHABET_t* pattern,
 
 static int handle_match(AC_MATCH_t* match, void* p) {
 	Engine* engine = p;
-	List* node = mpool_alloc(engine->pool, sizeof(List) + sizeof(int) * 2);
+	List* node = mpool_alloc(engine->pool, sizeof(List) + sizeof(int) * 3);
 	FLT_LIST_GET(node, int)[0] = match->position;
 	FLT_LIST_GET(node, int)[1] = match->patterns[0].length;
 	FLT_LIST_GET(node, int)[2] = match->patterns[0].flag;
-
-	log_info("T1 pattern: pos=%d, len=%d, flag=%d", match->position, match->patterns[0].length, match->patterns[0].flag);
-	log_info("T2 pattern: pos=%d, len=%d, flag=%d", FLT_LIST_GET(node, int)[0], FLT_LIST_GET(node, int)[1], FLT_LIST_GET(node, int)[2]);
 
 	*engine->tail = node;
 	engine->tail = &node->next;
@@ -82,7 +83,7 @@ void engine_feed_text(Engine* engine, const AC_ALPHABET_t* text,
 			text, length
 	};
 
-	log_info("Keep = %d", !engine->fresh);
+	log_debug("Keep = %d", !engine->fresh);
 
 	ac_automata_search(engine->automata, &t, !engine->fresh, &handle_match,
 			engine);

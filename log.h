@@ -7,4 +7,10 @@ void log_warning(const char* fmt, ...);
 void log_info(const char* fmt, ...);
 void log_debug(const char* fmt, ...);
 
+enum LogLevel {
+	kDebug = 1, kInfo, kWarning, kError, kFatal
+};
+
+static const int FLT_LOG_LEVEL = kDebug;
+
 #endif /* FILTER_LOG_H_INCLUDED_ */

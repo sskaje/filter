@@ -102,8 +102,11 @@ AC_STATUS_t ac_automata_add (AC_AUTOMATA_t * thiz, AC_PATTERN_t * patt)
         }
     }
 
-    if(n->final)
+    if(n->final) {
+        // update flag if necessary
+        node_update_flag(n, patt);
         return ACERR_DUPLICATE_PATTERN;
+    }
 
     n->final = 1;
     node_register_matchstr(n, patt);
