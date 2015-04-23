@@ -125,7 +125,9 @@ class filter
 
             $count = 0;
             do {
-                $result_pairs[] = unpack("vpos/vlen/vflag", substr($result, $start_pos, $pair_length));
+                $rr = unpack("vpos/vlen/vflag", substr($result, $start_pos, $pair_length));
+                $rr['word'] = substr($text, $rr['pos'], $rr['len']);
+                $result_pairs[] = $rr;
                 $start_pos += $pair_length;
                 ++$count;
             } while(isset($result[$start_pos]));
