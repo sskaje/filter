@@ -11,6 +11,10 @@ enum LogLevel {
 	kDebug = 1, kInfo, kWarning, kError, kFatal
 };
 
-static const int FLT_LOG_LEVEL = kDebug;
+//static const int FLT_LOG_LEVEL = kDebug;
+
+#ifndef FLT_LOG_LEVEL
+	#define FLT_LOG_LEVEL kDebug
+#endif
 
 #endif /* FILTER_LOG_H_INCLUDED_ */
